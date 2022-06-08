@@ -1,7 +1,7 @@
 <template>
 <div style="background-color:#1B012B;">
     <div class="d-flex justify-content-center" style="padding-top: 15px;">
-          <h2 class="titulo2">Gestionar Roles</h2>
+          <h2 class="titulo2">Crear Roles</h2>
       </div>
       <div class="d-flex justify-content-center" style="height: 460px">
           <div class="formulario">
