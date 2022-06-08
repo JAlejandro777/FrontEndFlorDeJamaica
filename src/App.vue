@@ -32,7 +32,7 @@
         <a v-on:click="loadHome" id="txtBt" class="btn btn-dark btn-lg" href="#">Home<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a v-on:click="loadRoles" id="txtBt" class="btn btn-dark btn-lg" href="#">Gestionar Roles<span class="sr-only">(current)</span></a>
+        <a v-on:click="loadRoles" id="txtBt" class="btn btn-dark btn-lg" href="#">Crear Roles<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item dropdown">
         <a id="txtBt" class="btn btn-dark btn-lg dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
