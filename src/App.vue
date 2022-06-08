@@ -118,6 +118,7 @@ export default {
     cerrarSesion: function(){
       localStorage.setItem('sesion', 'inactiva');
       this.menu.flag = localStorage.getItem('sesion')
+      localStorage.setItem('user', "null");
       this.$toast.show("Sesión cerrada", {
                 type: "error",
                 });
