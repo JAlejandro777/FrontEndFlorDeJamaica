@@ -39,19 +39,8 @@ export default {
     name: 'Login',
      setup () {
       onMounted(() => {
-          axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuario").then(response => {
-            usuarios.usuario = response.data;
-          })
-          // eslint-disable-next-line no-unused-vars
-          .catch(e => {
-              //console.log(e);
-          })
-      });
-        const usuarios = reactive({
-            usuario : [],
-            flag : false
-        });
 
+      });
       const state = reactive({
         usuario : null,
         contrasena: null
@@ -64,7 +53,7 @@ export default {
       contrasena :{ required : helpers.withMessage('Contraseña requerida.', required)
       }
   } 
-    return { v$:  useVuelidate(rules, state), state , usuarios
+    return { v$:  useVuelidate(rules, state), state 
     }
   },
     methods :{
@@ -73,14 +62,16 @@ export default {
             this.$router.push({ name: "SignUp" });
         },
         validar : function(){
-            //console.log(this.usuarios.usuario)
-            // eslint-disable-next-line no-unused-vars
-            Object.entries(this.usuarios.usuario).forEach(([key, value]) => {
-                if((Object.values(value)[4] == this.state.usuario) && (Object.values(value)[5] == this.state.contrasena)){
-                    this.usuarios.flag = true
-              }
+        if(this.v$.$invalid){
+            this.$toast.show("Ingrese los campos correctamente!", {
+              type: "error",       // all of other options may go here
             });
-            if(this.usuarios.flag){
+            return 
+        }
+        //console.log(this.state.contrasena)
+         axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuarios", this.state ).then((result) => {
+            //console.log(result.data);
+            if(result.data == "OK"){
                 localStorage.setItem('sesion', 'activa');
                 localStorage.setItem('user', this.state.usuario);
                 this.$emit("getData", localStorage.getItem('sesion'));
@@ -94,6 +85,8 @@ export default {
                     type: "error",
                 }); 
             }
+        })
+            
         }
     }
 }
