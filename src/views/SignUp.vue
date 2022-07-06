@@ -35,13 +35,22 @@
                   <label>Constraseña:</label>
                   <input type="password" class="form-control" placeholder="Ingrese Contraseña" v-model="state.usucontrasena">
               </div>
-              <label v-if="v$.usucontrasena.$silentErrors.length > 0" style="color:red;"> {{v$.usucontrasena.$silentErrors[0].$message}}</label>     
 
-                  <div class="d-flex justify-content-center" style="padding-top: 5px;">
-                      <button class="btn btn-light" v-on:click="createUser">
-                          Registrarse
-                      </button>
-                  </div>
+              <label v-if="v$.usucontrasena.$silentErrors.length > 0" style="color:red;"> {{v$.usucontrasena.$silentErrors[0].$message}}</label>     
+              <Popper v-if="v$.usucontrasena.$silentErrors.length > 0" :show="showPopper"  placement='right'>
+                  <i  @mouseover="showPopper = true" @mouseleave="showPopper = false" class="fas fa-info-circle" style="padding-left:10px" ></i>
+                  <template #content>
+                    <p>La constraseña debe tener letras mayusculas,</p>
+                       <p>minusculas,
+                       numeros y caracteres especiales.</p>
+                  </template>
+              </Popper>
+
+              <div class="d-flex justify-content-center" style="padding-top: 5px;">
+                  <button class="btn btn-light" v-on:click="createUser">
+                      Registrarse
+                  </button>
+              </div>
              
 
           </div>
@@ -55,6 +64,7 @@ import useVuelidate from '@vuelidate/core'
 import { required, email, maxLength,minLength,helpers  } from '@vuelidate/validators'
 import axios from 'axios';
 import { reactive, onMounted } from "vue";
+import Popper from "vue3-popper";
 
 export default {
   name: 'SignUp',
@@ -98,7 +108,11 @@ export default {
     return { v$:  useVuelidate(rules, state), state , roles
     }
   },
-
+  data() {
+    return {
+      showPopper: false,
+    };
+  },
   methods: {
        rolesSelect: function () {
           axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/rol").then(response => {
@@ -152,37 +166,29 @@ export default {
        
 
     
-  }
-  
+  },
+  components: {
+      Popper,
+    },
 }
 </script>
 
-setup () {
-    const state = reactive({
-      nombre: '',
-      cedula: '',
-      correo: '',
-      cargo: '',
-      contraseña : ''
-    })
-    const rules = {
-      nombre: { required }, 
-      cedula: { required }, 
-      correo: { required, email },
-      cargo: { required },
-       contraseña :{required,minLength : minLength(6),
-        strongPassword(contraseña) {
-          return (
-            /[a-z]/.test(contraseña) && //checks for a-z
-            /[0-9]/.test(contraseña) && //checks for 0-9
-            /\W|_/.test(contraseña) && //checks for special char
-            contraseña.length >= 8
-          );
-        }
-      }
-    }
-
-    const v$ = useVuelidate(rules, state)
-
-    return { state, v$ }
+<style scoped>
+  :deep(.popper) {
+    background: #000000;
+    padding: 20px;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
   }
+
+  :deep(.popper #arrow::before) {
+    background: #000000;
+  }
+
+  :deep(.popper:hover),
+  :deep(.popper:hover > #arrow::before) {
+    background: #000000;
+  }
+</style>
