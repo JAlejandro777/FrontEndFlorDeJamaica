@@ -37,7 +37,7 @@
               </div>
 
               <label v-if="v$.usucontrasena.$silentErrors.length > 0" style="color:red;"> {{v$.usucontrasena.$silentErrors[0].$message}}</label>     
-              <Popper v-if="v$.usucontrasena.$silentErrors.length > 0" :show="showPopper"  placement='right'>
+              <Popper v-if="v$.usucontrasena.$silentErrors.length > 0" :show="showPopper"  placement='top'>
                   <i  @mouseover="showPopper = true" @mouseleave="showPopper = false" class="fas fa-info-circle" style="padding-left:10px" ></i>
                   <template #content>
                     <p>La constraseña debe tener letras mayusculas,</p>
