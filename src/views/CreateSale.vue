@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group" style="padding-top:35px">
-                        <h3>Valor a Pagar:<strong> {{calculoTotalPro}}</strong></h3>
+                        <label>Valor:<strong> {{calculoTotalPro}}</strong></label>
                        
                     </div>
                 </div>
@@ -50,16 +50,15 @@
                           Agregar producto
                       </button>
                 </div>
-                <div class="col-12">
-                    <div class="tabla">
+                <div class="col-12" style="padding-top:15px">
                         <table class="table table-striped table-dark" >
                             <thead>
                                 <tr>
-                                <th scope="col">Cliente</th>
-                                <th scope="col">Cantidad</th>
-                                <th scope="col">Producto</th>
-                                <th scope="col">IVA</th>
-                                <th scope="col">Total</th>
+                                <th scope="col-sm">Cliente</th>
+                                <th scope="col-sm">Cantidad</th>
+                                <th scope="col-sm">Producto</th>
+                                <th scope="col-sm">IVA</th>
+                                <th scope="col-sm">Total</th>
                     
                                 </tr>
                             </thead>
@@ -73,12 +72,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                   
                 </div>
              
                 <div class="col-4">
                     <div class="form-group" style="padding-top:35px" >
-                        <h3>Total: {{calculoTotal}}</h3>
+                        <label>Total: {{calculoTotal}}</label>
                     </div>
                 </div>
                 <div class="col-4">
@@ -89,14 +88,14 @@
                 </div>
                 <div class="col-4">
                     <div v-if="!pago.tarjeta || pago.tarjeta == null" class="form-group" style="padding-top:35px">
-                        <h3>Devolución: {{calculoDevolucion}}</h3>
+                        <label>Devolución: {{calculoDevolucion}}</label>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" style="padding-left:45px">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" v-model="pago.tarjeta" >
                         <label class="form-check-label" for="flexCheckDefault">
-                            Paga con Tarjeta
+                            Tarjeta
                         </label>
                     </div>
                 </div>
