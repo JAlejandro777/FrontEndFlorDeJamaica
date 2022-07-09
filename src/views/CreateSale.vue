@@ -25,8 +25,8 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group" >
-                        <label>Cantidad de Unidades:</label>
-                        <input type="number" class="form-control" placeholder="Ingrese Cantidad Unidades" v-model="state.vencantidadunidades">
+                        <label>Unidades:</label>
+                        <input type="number" class="form-control" placeholder="Unidades" v-model="state.vencantidadunidades">
                     </div>
                       <label v-if="v$.vencantidadunidades.$silentErrors.length > 0" style="color:red;"> {{v$.vencantidadunidades.$silentErrors[0].$message}}</label>
                 </div>
