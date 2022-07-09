@@ -7,7 +7,7 @@
           <div class="formulario2">
               <div class="form-group">
                   <label>Cargo:</label>
-                 <select v-on:click="rolesSelect" class="form-control" v-model="state.tblrol_rolid" id="select1">
+                 <select class="form-control" v-model="state.tblrol_rolid" id="select1">
                       <option v-for="item in roles.rol" :key="item.rolid"> {{item.rolnombre}}</option>
                   </select>
               </div>
@@ -70,7 +70,14 @@ export default {
   name: 'SignUp',
   setup () {
       onMounted(() => {
-       
+        axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/rol").then(response => {
+            roles.rol = response.data;
+            //console.log(this.roles.rol);
+          })
+          // eslint-disable-next-line no-unused-vars
+          .catch(e => {
+              //console.log(e);
+          })
       });
       const roles = reactive({
          rol:[]
@@ -114,16 +121,6 @@ export default {
     };
   },
   methods: {
-       rolesSelect: function () {
-          axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/rol").then(response => {
-            this.roles.rol = response.data;
-            //console.log(this.roles.rol);
-          })
-          // eslint-disable-next-line no-unused-vars
-          .catch(e => {
-              //console.log(e);
-          })
-       },
        createUser: function(){
          if((this.v$.$invalid) || (this.state.tblrol_rolid == null)){
             this.$toast.show("Ingrese los campos correctamente!", {

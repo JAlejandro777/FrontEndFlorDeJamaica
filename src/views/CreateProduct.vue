@@ -12,7 +12,7 @@
             <label v-if="v$.procodigo.$silentErrors.length > 0" style="color:red;"> {{v$.procodigo.$silentErrors[0].$message}}</label>     
              <div class="form-group">
                     <label>Proveedor:</label>
-                    <select v-on:click="proveedorSelect" class="form-control"  id="select1" v-model="state.tblproveedor_proid">
+                    <select class="form-control"  id="select1" v-model="state.tblproveedor_proid">
                         <option v-for="item in proveedores.proveedor" :key="item.proid"> {{item.pronombre}}</option>
                     </select>                
             </div>
@@ -72,7 +72,15 @@ import { reactive, onMounted } from "vue";
 export default {
     name : "CreateProduct",
     setup(){
-        onMounted(() => {       
+        onMounted(() => {
+                axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/proveedor").then(response => {
+                    proveedores.proveedor = response.data;
+                    //console.log(this.productos.producto);
+                })
+                // eslint-disable-next-line no-unused-vars
+                .catch(e => {
+                    //console.log(e);
+                })       
         });
         const proveedores = reactive({
             proveedor:[]
@@ -105,16 +113,6 @@ export default {
     return { v$:  useVuelidate(rules, state), state, proveedores }    
     },
         methods :{
-            proveedorSelect: function () {
-                axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/proveedor").then(response => {
-                    this.proveedores.proveedor = response.data;
-                    //console.log(this.productos.producto);
-                })
-                // eslint-disable-next-line no-unused-vars
-                .catch(e => {
-                    //console.log(e);
-                })
-            },
         CreateProduct : function(){
             if(this.v$.$invalid){
                 this.$toast.show("Ingrese los campos correctamente!", {

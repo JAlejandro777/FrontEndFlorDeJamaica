@@ -6,57 +6,111 @@
       </div>
       <div class="d-flex justify-content-center" style="height: 850px">
           <div class="formulario4">
-              <div class="form-group">            
-                  <label>Producto:</label>
-                    <select v-on:click="productsSelect" class="form-control"  id="select1" v-model="state.venproducto">
-                      <option v-for="item in productos.producto" :key="item.procodigo"> {{item.pronombre}}</option>
-                    </select>    
-              </div>
-              <div class="form-group" >
-                  <label>Cantidad de Unidades:</label>
-                  <input type="number" class="form-control" placeholder="Ingrese Cantidad Unidades" v-model="state.vencantidadunidades">
-              </div>
-                <label v-if="v$.vencantidadunidades.$silentErrors.length > 0" style="color:red;"> {{v$.vencantidadunidades.$silentErrors[0].$message}}</label>
-              <div class="form-group">
-                  <label>IVA:</label>
-                  <select class="form-control" v-model="state.veniva">
-                      <option>Sin IVA</option>
-                      <option>19%</option>
-                  </select>
-              </div>
-               <div class="form-group">
-                    <label>Cliente:</label>
-                    <select v-on:click="clienteSelect" class="form-control"  id="select1" v-model="state.vencliente">
-                        <option v-for="item in clientes.cliente" :key="item.clicedula"> {{item.clinombre}}</option>
-                    </select>                
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Cliente:</label>
+                        <select class="form-control"  id="select1" v-model="state.vencliente">
+                            <option v-for="item in clientes.cliente" :key="item.clicedula"> {{item.clinombre}}</option>
+                        </select>                
+                    </div>
                 </div>
-              <div class="form-group">
-                  <label>Valor a Pagar:</label>
-                  <input type="number" class="form-control" placeholder="Ingrese Valor a Pagar" v-model="state.venvalorpagar" @focus="calcularTotal" readonly>
-              </div>
-                <label v-if="v$.venvalorpagar.$silentErrors.length > 0" style="color:red;"> {{v$.venvalorpagar.$silentErrors[0].$message}}</label>
-              <div v-if="!pago.tarjeta || pago.tarjeta == null" class="form-group" >
-                  <label>Monto Recibido:</label>
-                  <input type="number" class="form-control" placeholder="Ingrese Monto Recibido" v-model="pago.monto">
-              </div>
-              <div v-if="!pago.tarjeta || pago.tarjeta == null" class="form-group">
-                  <label>Devolución:</label>
-                  <input type="number" class="form-control" placeholder="Ingrese Devolución" @focus="calcularDevolución" v-model="pago.devolucion" readonly>
-              </div>
-              <div class="form-check">
-                  <input class="form-check-input" type="checkbox" v-model="pago.tarjeta" >
-                  <label class="form-check-label" for="flexCheckDefault">
-                      Paga con Tarjeta
-                  </label>
-              </div>
-              
-              <div style="padding-top: 10px;">                    
-                    <button class="btn btn-light" v-on:click="CreateSale">
-                        Generar Venta y Factura
-                    </button>
-              </div>
+                <div class="col-4">
+                    <div class="form-group">            
+                        <label>Producto:</label>
+                        <select class="form-control"  id="select1" v-model="state.venproducto">
+                            <option v-for="item in productos.producto" :key="item.procodigo"> {{item.pronombre}}</option>
+                        </select>    
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group" >
+                        <label>Cantidad de Unidades:</label>
+                        <input type="number" class="form-control" placeholder="Ingrese Cantidad Unidades" v-model="state.vencantidadunidades">
+                    </div>
+                      <label v-if="v$.vencantidadunidades.$silentErrors.length > 0" style="color:red;"> {{v$.vencantidadunidades.$silentErrors[0].$message}}</label>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>IVA:</label>
+                        <select class="form-control" v-model="pago.ivaModel">
+                            <option>Sin IVA</option>
+                            <option>19%</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group" style="padding-top:35px">
+                        <h3>Valor a Pagar:<strong> {{calculoTotalPro}}</strong></h3>
+                       
+                    </div>
+                </div>
+                 <div class="col-4" style="padding-top: 30px;">                    
+                      <button class="btn btn-success" v-on:click="CreateSale">
+                          Agregar producto
+                      </button>
+                </div>
+                <div class="col-12">
+                    <div class="tabla">
+                        <table class="table table-striped table-dark" >
+                            <thead>
+                                <tr>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Producto</th>
+                                <th scope="col">IVA</th>
+                                <th scope="col">Total</th>
+                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in venta" :key="item.producto">
+                                <td>{{item[4]}}</td>
+                                <td>{{item[0]}}</td>
+                                <td>{{item[3]}}</td>
+                                <td>{{item[1]}}</td>
+                                <td>{{item[2]}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+             
+                <div class="col-4">
+                    <div class="form-group" style="padding-top:35px" >
+                        <h3>Total: {{calculoTotal}}</h3>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div v-if="!pago.tarjeta || pago.tarjeta == null" class="form-group" >
+                        <label>Monto Recibido:</label>
+                        <input id="dev" type="number" class="form-control" placeholder="Ingrese Monto Recibido" v-model="pago.monto" @change="validation">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div v-if="!pago.tarjeta || pago.tarjeta == null" class="form-group" style="padding-top:35px">
+                        <h3>Devolución: {{calculoDevolucion}}</h3>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" v-model="pago.tarjeta" >
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Paga con Tarjeta
+                        </label>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div style="padding-top: 10px;">                    
+                          <button class="btn btn-success" v-on:click="createInvoice">
+                              Generar Factura
+                          </button>
+                    </div>
+                </div>
+            </div>
            
           </div>
+          <!--<pre>{{venta}}</pre>-->
       </div>
 </div>
 </template>
@@ -72,7 +126,13 @@ import { reactive, onMounted } from "vue";
 export default {
     name : "CreateSale",
     setup(){
-        onMounted(() => {       
+        onMounted(() => {      
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto").then(response => {
+                productos.producto = response.data;
+            }) 
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/cliente").then(response => {
+                clientes.cliente = response.data;
+            })
         });
         const productos = reactive({
             producto:[],
@@ -86,6 +146,8 @@ export default {
             monto : "",
             iva : null,
             devolucion : "",
+            ivaModel : null,
+            total : null
         });
 
         const state = reactive({
@@ -96,125 +158,191 @@ export default {
             vencliente : null
 
         });
+    
        const rules = {
-            vencantidadunidades: { required: helpers.withMessage('Unidades requeridas.', required)},
-            venvalorpagar: { required: helpers.withMessage('Valor requerido.', required)},
+            vencantidadunidades: { required: helpers.withMessage('Unidades requeridas.', required)}
+          
         } 
     return { v$:  useVuelidate(rules, state), state, productos,pago,clientes}    
     },
+    data(){
+         return {
+        venta:[],
+        table:{
+            vencantidadunidades : null,
+            veniva : null,
+            venvalorpagar : null,
+            venproducto: null,
+            vencliente: null
+        }
+         }
+    },
+
+    computed: {
+        calculoTotalPro: function () {
+           
+           return this.calculoProduto()
+        
+        },
+        calculoTotal: function(){
+            return this.total()
+        },
+        calculoDevolucion: function(){
+            return this.calcularDevolución()
+        }
+    },
     methods :{
-        calcularDevolución: function(){
-            if(this.state.venvalorpagar == "" || this.pago.monto == "" || this.pago.monto  == null){
+        validation: function(){
+            var x = document.getElementById("dev").value; //vacia el campo.
+            //console.log(x)
+            if(x == "" || x == null){
                 this.$toast.show("Monto requerido.", {
                     type: "error",
                 });
                 return
             }
-            if(this.pago.monto < this.state.venvalorpagar ){
-                this.$toast.show("Fondos Insuficientes.", {
+            if(x < this.pago.total ){
+                this.$toast.show("Fondos insuficientes.", {
                     type: "error",
                 });
                 return
             }
-            this.pago.devolucion = this.pago.monto - this.state.venvalorpagar
         },
-        calcularTotal: function(){
-            if(this.state.veniva == null || this.state.venproducto == null || this.state.vencantidadunidades == null){
+        calcularDevolución: function(){
+            if(this.pago.total == "" || this.pago.total == null){
+                return 0
+            }
+            if(this.pago.monto < this.pago.total ){
+                
+                return 0
+            }
+           
+            return this.pago.devolucion = this.pago.monto - this.pago.total
+        },
+        calculoProduto: function(){
+             if(this.pago.ivaModel == null || this.state.venproducto == null || this.state.vencantidadunidades == null){
                 return;
             }
-             this.productos.precioProducto = this.state.venproducto
+            this.productos.precioProducto = this.state.venproducto
             // eslint-disable-next-line no-unused-vars
             Object.entries(this.productos.producto).forEach(([key, value]) => {
                 if(Object.values(value)[3] == this.productos.precioProducto ){
                     this.productos.precioProducto = Object.values(value)[6] 
                 }
             });
-            if(this.state.veniva == "19%"){
+            if(this.pago.ivaModel == "19%"){
                 this.pago.iva = 0.19
                 this.productos.precioProducto  = this.productos.precioProducto * this.state.vencantidadunidades
                 this.pago.iva = this.pago.iva * this.productos.precioProducto
+                this.state.veniva = this.pago.iva 
                 this.productos.precioProducto = this.productos.precioProducto + this.pago.iva
                 this.state.venvalorpagar =  this.productos.precioProducto
+                return this.state.venvalorpagar;
             }
             else{
                 this.pago.iva = 0
+                this.state.veniva = this.pago.iva 
                 this.productos.precioProducto  = this.productos.precioProducto * this.state.vencantidadunidades
                 this.state.venvalorpagar =  this.productos.precioProducto
+                return this.state.venvalorpagar;
             }
-            //console.log(this.state.venvalorpagar)
-            
+                       
         },
-        productsSelect: function () {
-          axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto").then(response => {
-            this.productos.producto = response.data;
-            //console.log(this.productos.producto);
-          })
-          // eslint-disable-next-line no-unused-vars
-          .catch(e => {
-              //console.log(e);
-          })
-        },
-        clienteSelect: function () {
-          axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/cliente").then(response => {
-            this.clientes.cliente = response.data;
-            //console.log( this.clientes.cliente);
-          })
-          // eslint-disable-next-line no-unused-vars
-          .catch(e => {
-              //console.log(e);
-          })
+        total : function(){
+            let suma = null;
+            this.venta.forEach(function(i) {
+                suma += i[2] 
+            })
+            this.pago.total = suma
+            return this.pago.total
         },
         CreateSale : function(){
-            if(this.v$.$invalid || this.state.venproducto == null || this.state.vencliente  == null || this.state.veniva == null){
+            if(this.state.venvalorpagar == null || this.state.vencantidadunidades == null || this.state.venproducto == null || this.state.vencliente  == null || this.state.veniva == null){
                 this.$toast.show("Ingrese los campos correctamente!", {
                     type: "error",
                 });
                 return
             }
-            if(this.pago.tarjeta == null || this.pago.tarjeta == false){
+            /*if(this.pago.tarjeta == null || this.pago.tarjeta == false){
                 if(this.pago.monto == "" || this.pago.devolucion.length == 0 ){
                     this.$toast.show("Ingrese los campos correctamente!", {
                         type: "error",
                     });
                     return
                 }
-            }
-            this.state.veniva = this.pago.iva
+            }*/
+            // eslint-disable-next-line no-unused-vars
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/venta", this.state).then(response => {
-                //console.log(response.data)
-                const linkSource = `data:application/pdf;base64,${response.data}`;
-                const downloadLink = document.createElement("a");
-                const fileName = "Factura.pdf";
-                downloadLink.href = linkSource;
-                downloadLink.download = fileName;
-                downloadLink.click();
-                
+               
+                console.log(this.state)
+                this.table.vencantidadunidades = this.state.vencantidadunidades
+                this.table.vencliente =  this.state.vencliente
+                this.table.veniva = this.state.veniva
+                this.table.venproducto = this.state.venproducto
+                this.table.venvalorpagar = this.state.venvalorpagar
+                console.log(this.venta)
+                this.venta.push(Object.values(this.table))
+                console.log(this.venta)
+
+                this.pago.ivaModel = null
                 this.state.vencantidadunidades = null
-                this.state.vencliente = null
+                //this.state.vencliente = null
                 this.state.veniva = null,
                 this.state.venproducto = null,
                 this.state.venvalorpagar = null,
-                this.pago.monto = null
+                //this.pago.monto = null
                 this.pago.devolucion = null
                 this.pago.iva = null
                 this.productos.precioProducto = null
                 this.$toast.show("Venta Satisfactoria!!", {
                     type: "success",
                 });
-               this.$swal.fire({
-                    title: 'Factura Generada!!',
-                    icon: 'success',
-                })
+                /*
+               
+                */
             })
             // eslint-disable-next-line no-unused-vars
             .catch(e => {
-              //console.log(e.response.data.message);
+                console.log(e.response.data.message);
+                if(e.response.data.message == "No hay unidades!"){
+                    this.$toast.show("El producto se encuentra agotado, no hay unidades disponibles!", {
+                    type: "error",
+                    });
+                    return
+                }
+                if(e.response.data.message == "No hay esta cantidad!"){
+                    this.$toast.show("No se encuentran todas las unidades solicitadas disponibles, intente con menor cantidad!", {
+                    type: "error",
+                    });
+                    return
+                }
                 this.$toast.show("Hubo un error, vuelva a intentarlo", {
                 type: "error",
                 });
           })
+                
 
      
+        },
+        createInvoice: function(){
+            axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/factura", this.venta).then(response => {
+                //console.log(response.data)
+                this.pago.monto = null
+                const linkSource = `data:application/pdf;base64,${response.data}`;
+                const downloadLink = document.createElement("a");
+                const fileName = "Factura.pdf";
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+                 this.$swal.fire({
+                    title: 'Factura Generada!!',
+                    icon: 'success',
+                })
+                
+            }).catch(e => {
+                console.log(e.response.data.message);
+                
+          })
         }
     }
 
