@@ -316,7 +316,7 @@ export default {
                     return
                 }
                 this.$toast.show("Hubo un error, vuelva a intentarlo", {
-                type: "error",
+                    type: "error",
                 });
           })
                 
@@ -324,6 +324,13 @@ export default {
      
         },
         createInvoice: function(){
+            if(this.venta.length < 1){
+                this.$toast.show("Tiene que agregar almenos un producto.", {
+                    type: "error",
+                });
+                return 
+
+            }
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/factura", this.venta).then(response => {
                 //console.log(response.data)
                 this.pago.monto = null
