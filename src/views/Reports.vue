@@ -32,9 +32,25 @@
  
  <script>
  import axios from 'axios';
+ import {  onMounted} from "vue";
  export default {
      // eslint-disable-next-line vue/multi-word-component-names
      name:"Reports",
+       setup(){
+        onMounted(() => {       
+            // eslint-disable-next-line no-unused-vars
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/ventasAll" ).then((result) => {})
+            // eslint-disable-next-line no-unused-vars
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/cliente" ).then((result) => {})
+            // eslint-disable-next-line no-unused-vars
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto" ).then((result) => {})
+            // eslint-disable-next-line no-unused-vars
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuario" ).then((result) => {})
+
+
+        });
+  
+    },
      methods : {
         informeVentas : function(){
                 axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/venta").then(response => {

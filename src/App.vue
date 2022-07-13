@@ -1,7 +1,7 @@
 <template>
 <div class="d-flex justify-content-center" style="background-color:#1B012B;">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark"  :key="menu.flag"  v-if="menu.flag  != 'activa'">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark"  :key="menu.sesion"  v-if="menu.sesion  != 'activa'">
   <a class="navbar-brand" href="#">Menu</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,7 @@
 </nav>
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-if="menu.flag == 'activa'" :key="menu.flag">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-if="menu.sesion == 'activa'" :key="menu.sesion">
   <a class="navbar-brand" href="#">Menu</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -31,10 +31,10 @@
       <li class="nav-item active">
         <a v-on:click="loadHome" id="txtBt" class="btn btn-dark btn-lg" href="#">Home<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item active">
+      <li v-if="menu.rol == 'Administrador'" class="nav-item active">
         <a v-on:click="loadRoles" id="txtBt" class="btn btn-dark btn-lg" href="#">Crear Roles<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item dropdown">
+      <li v-if="menu.rol == 'Administrador' || menu.rol == 'Almacenista'"  class="nav-item dropdown">
         <a id="txtBt" class="btn btn-dark btn-lg dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Ingreso y control
         </a>
@@ -43,7 +43,7 @@
           <a id="txtBt" v-on:click="loadViewProducts" class="dropdown-item" href="#">Ver Productos</a>
         </div>
       </li>
-      <li class="nav-item dropdown">
+      <li v-if="menu.rol == 'Administrador' || menu.rol == 'Cajero'"  class="nav-item dropdown">
         <a id="txtBt" class="btn btn-dark btn-lg dropdown-toggle" href="#"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Ventas y seguimiento
         </a> 
@@ -53,7 +53,7 @@
             <a id="txtBt" class="dropdown-item" v-on:click="loadCreateSale">Registrar Venta</a>
         </div>
       </li>
-      <li class="nav-item active">
+      <li v-if="menu.rol == 'Administrador'"  class="nav-item active">
         <a v-on:click="loadReports" id="txtBt" class="btn btn-dark btn-lg" href="#">Informes<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
@@ -76,10 +76,11 @@ export default {
   name: 'App',
   setup(){  
      onMounted(() => {
-        //console.log(menu.flag)
+        //menu.rol  = localStorage.getItem('rol')
         });
       const menu = reactive({
-            flag : localStorage.getItem('sesion')
+            sesion : localStorage.getItem('sesion'),
+            rol : localStorage.getItem('rol')
         });
         return { menu }
   },
@@ -117,16 +118,20 @@ export default {
     },    
     cerrarSesion: function(){
       localStorage.setItem('sesion', 'inactiva');
-      this.menu.flag = localStorage.getItem('sesion')
+      this.menu.sesion = localStorage.getItem('sesion')
       localStorage.setItem('user', "null");
+      localStorage.setItem('rol', "null");
+      localStorage.setItem('data', "null");
+      localStorage.setItem('cliente', "null");
       this.$toast.show("Sesión cerrada", {
                 type: "error",
                 });
       this.$router.push({ name: "Login" })
      
     },
-    getData : function(data){
-        this.menu.flag = data
+    getData : function(data, data2){
+        this.menu.sesion = data
+        this.menu.rol = data2
     },
     
 

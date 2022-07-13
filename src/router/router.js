@@ -32,43 +32,90 @@ const routes = [
     path: "/roles",
     name: "Roles",
     component: Roles,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+     // eslint-disable-next-line no-unused-vars
+     beforeEnter: (to, from) => {
+      if(to.meta.rol != "Administrador"){
+        return { name: "Home" }
+      }
+    },
   }, 
   {
     path: "/createProduct",
     name: "CreateProduct",
     component: CreateProduct,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+     // eslint-disable-next-line no-unused-vars
+     beforeEnter: (to, from) => {
+      if(to.meta.rol != "Administrador" && to.meta.rol != "Almacenista"){
+        return { name: "Home" }
+      }
+
+    },
   },
   {
     path: "/viewProducts",
     name: "ViewProducts",
     component: ViewProducts,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    // eslint-disable-next-line no-unused-vars
+    beforeEnter: (to, from) => {
+      if(to.meta.rol != "Administrador" && to.meta.rol != "Almacenista"){
+        return { name: "Home" }
+      }
+    },
   },  
   {
     path: "/createCustomer",
     name: "CreateCustomer",
     component: CreateCustomer,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    // eslint-disable-next-line no-unused-vars
+    beforeEnter: (to, from) => {
+      //console.log(to.meta.rol)
+      if((to.meta.rol != "Administrador") && (to.meta.rol != 'Cajero')){
+        return { name: "Home" }
+      }
+    },
   }, 
   {
     path: "/viewCustomers",
     name: "ViewCustomers",
     component: ViewCustomers,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    // eslint-disable-next-line no-unused-vars
+    beforeEnter: (to, from) => {
+      //console.log(to.meta.rol)
+      if((to.meta.rol != "Administrador") && (to.meta.rol != 'Cajero')){
+        return { name: "Home" }
+      }
+    },
   },
   {
     path: "/createSale",
     name: "CreateSale",
     component: CreateSale,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    // eslint-disable-next-line no-unused-vars
+    beforeEnter: (to, from) => {
+      //console.log(to.meta.rol)
+      if((to.meta.rol != "Administrador") && (to.meta.rol != 'Cajero')){
+        return { name: "Home" }
+      }
+    },
   }, 
   {
     path: "/reports",
     name: "Reports",
     component: Reports,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    // eslint-disable-next-line no-unused-vars
+    beforeEnter: (to, from) => {
+      //console.log(to.meta.rol)
+      if(to.meta.rol != "Administrador" ){
+        return { name: "Home" }
+      }
+    },
   },     
 
 ];
@@ -86,8 +133,16 @@ async function isAuth() {
 // eslint-disable-next-line no-unused-vars
 router.beforeEach(async(to, from) => {
   var is_auth = await isAuth();
+  //console.log(to.meta.rol)
+  var roles =  localStorage.getItem("rol");
+  //console.log(roles)
+  to.meta.rol = roles
+  //console.log(to.meta.rol)
   if (is_auth == to.meta.requiresAuth) return true
-  if (is_auth) return { name: "Home" };
+  if (is_auth) {
+    //console.log("Entro")
+    return { name: "Home" };
+  }
 
   return { name: "Login" };
 })

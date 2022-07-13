@@ -39,7 +39,8 @@ export default {
     name: 'Login',
      setup () {
       onMounted(() => {
-
+        // eslint-disable-next-line no-unused-vars
+        axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuario" ).then((result) => {})
       });
       const state = reactive({
         usuario : null,
@@ -71,10 +72,11 @@ export default {
         //console.log(this.state.contrasena)
          axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuarios", this.state ).then((result) => {
             //console.log(result.data);
-            if(result.data == "OK"){
+            if(result.data != "NO"){
                 localStorage.setItem('sesion', 'activa');
                 localStorage.setItem('user', this.state.usuario);
-                this.$emit("getData", localStorage.getItem('sesion'));
+                localStorage.setItem('rol', result.data);
+                this.$emit("getData", localStorage.getItem('sesion'), localStorage.getItem('rol'));
                 this.$toast.show("Inicio de sesión correcto", {
                     type: "success",
                 });

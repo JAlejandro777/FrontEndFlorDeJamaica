@@ -10,7 +10,7 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label>Cliente:</label>
-                        <select class="form-control"  id="select1" v-model="state.vencliente">
+                        <select class="form-control"  id="select1" v-model="state.vencliente" @change="clienteLS">
                             <option v-for="item in clientes.cliente" :key="item.clicedula"> {{item.clinombre}}</option>
                         </select>                
                     </div>
@@ -45,30 +45,43 @@
                        
                     </div>
                 </div>
-                 <div class="col-4" style="padding-top: 30px;">                    
+                 <div v-if="ventas.flag" class="col-4" style="padding-top: 30px;">                    
                       <button class="btn btn-success" v-on:click="CreateSale">
                           Agregar producto
                       </button>
                 </div>
-                <div class="col-12" style="padding-top:15px">
+                <div v-if="!ventas.flag" class="col-4" style="padding-top: 30px;">                    
+                      <button class="btn btn-warning" v-on:click="updateSale">
+                          Actualizar producto
+                      </button>
+                </div>
+                <div align="start" class="col-12" style="padding-top:15px">
+                    <h6>Cliente: <strong>{{cliente}}</strong></h6>
+                </div>
+                
+                <div class="col-12" >
                         <table class="table table-striped table-dark" >
                             <thead>
                                 <tr>
-                                <th scope="col-sm">Cliente</th>
-                                <th scope="col-sm">Cantidad</th>
+                                <!--<th scope="col-sm">Cliente</th>-->
                                 <th scope="col-sm">Producto</th>
+                                <th scope="col-sm">Cantidad</th>
                                 <th scope="col-sm">IVA</th>
                                 <th scope="col-sm">Total</th>
+                                <th scope="col-sm"></th>
                     
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="item in venta" :key="item.producto">
+                                <tr v-for="(item,index) in ventas.venta" :key="item[0]">
+                                <!--<td>{{item[5]}}</td>-->
                                 <td>{{item[4]}}</td>
-                                <td>{{item[0]}}</td>
-                                <td>{{item[3]}}</td>
                                 <td>{{item[1]}}</td>
                                 <td>{{item[2]}}</td>
+                                <td>{{item[3]}}</td>
+                                <td><i  v-on:click="editar(item,index)" class="fas fa-edit"></i>
+                                    <i v-on:click="deleteSale(item[0],index)" class="fas fa-trash"></i>
+                                </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -125,7 +138,12 @@ import { reactive, onMounted } from "vue";
 export default {
     name : "CreateSale",
     setup(){
-        onMounted(() => {      
+        onMounted(() => {  
+            state.vencliente = localStorage.getItem("cliente")
+            if(JSON.parse(localStorage.getItem("data")) != null){
+                console.log(ventas.venta)
+                ventas.venta = JSON.parse(localStorage.getItem("data"))
+            }  
             axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto").then(response => {
                 productos.producto = response.data;
             }) 
@@ -139,6 +157,12 @@ export default {
         });
         const clientes = reactive({
             cliente:[]
+        });
+        const ventas = reactive({
+            venta:[],
+            flag : true,
+            id: null,
+            index: null
         });
         const pago = reactive({
             tarjeta:null,
@@ -162,24 +186,11 @@ export default {
             vencantidadunidades: { required: helpers.withMessage('Unidades requeridas.', required)}
           
         } 
-    return { v$:  useVuelidate(rules, state), state, productos,pago,clientes}    
-    },
-    data(){
-         return {
-        venta:[],
-        table:{
-            vencantidadunidades : null,
-            veniva : null,
-            venvalorpagar : null,
-            venproducto: null,
-            vencliente: null
-        }
-         }
+    return { v$:  useVuelidate(rules, state), state, productos,pago,clientes,ventas}    
     },
 
     computed: {
         calculoTotalPro: function () {
-           
            return this.calculoProduto()
         
         },
@@ -188,9 +199,87 @@ export default {
         },
         calculoDevolucion: function(){
             return this.calcularDevolución()
+        },
+        cliente:function(){
+        
+            return this.state.vencliente
         }
     },
     methods :{
+        clienteLS:function(){
+            localStorage.setItem('cliente', this.state.vencliente);
+        },
+        // eslint-disable-next-line no-unused-vars
+        editar:function(array, i){
+            console.log("Editar:" + this.ventas.venta)
+            this.ventas.id = array[0]
+            this.ventas.index = i
+            this.ventas.flag = false
+            this.state.vencantidadunidades = array[1]
+            this.state.vencliente = array[5]
+            if(array[2] > 0){
+                this.pago.ivaModel = "19%"
+             
+            }else{
+                this.pago.ivaModel = "Sin IVA"
+            }
+            this.state.venproducto = array[4]
+            this.state.venvalorpagar = array[3]
+            console.log(this.ventas.venta)
+
+        },
+        deleteSale: function(id,index){
+            let url = "https://backendcentronaturista.herokuapp.com/FlorDeJamaica/sale/" + id
+            axios.delete(url).then(response => {
+                if(response.data == "OK"){
+                    //this.ventas.venta.pop(index);
+                    this.ventas.venta.splice(index, 1);
+                    localStorage.setItem("data", JSON.stringify(this.ventas.venta));
+                    this.$toast.show("Se elimino el producto de la venta.", {
+                        type: "error",
+                    });
+                }
+            // eslint-disable-next-line no-unused-vars
+            }).catch(e => {
+                console.log(e)
+            })
+ 
+        },
+        updateSale: function(){
+            console.log(this.ventas.venta)
+            let url = "https://backendcentronaturista.herokuapp.com/FlorDeJamaica/sale/" + this.ventas.id
+            // eslint-disable-next-line no-unused-vars
+            axios.put(url,this.state).then(response => {
+                    //console.log(Object.values(response.data))
+                    console.log(this.ventas.venta)
+                    console.log(this.ventas.index)
+                    //this.ventas.venta.pop(0);
+                    this.ventas.venta.splice(this.ventas.index,1,Object.values(response.data));
+                    console.log(this.ventas.venta)
+                    localStorage.setItem("data", JSON.stringify(this.ventas.venta));
+    
+                    this.pago.ivaModel = null
+                    this.state.vencantidadunidades = null
+                    this.state.vencliente = localStorage.getItem("cliente")
+                    this.state.veniva = null,
+                    this.state.venproducto = null,
+                    this.state.venvalorpagar = null,
+                    //this.pago.monto = null
+                    this.pago.devolucion = null
+                    this.pago.iva = null
+                    this.productos.precioProducto = null
+
+
+                    this.$toast.show("Se actualizo el producto de la venta.", {
+                        type: "success",
+                    });
+                    this.ventas.flag = true 
+                
+            // eslint-disable-next-line no-unused-vars
+            }).catch(e => {
+                console.log(e)
+            })
+        },
         validation: function(){
             var x = document.getElementById("dev").value; //vacia el campo.
             //console.log(x)
@@ -249,8 +338,8 @@ export default {
         },
         total : function(){
             let suma = null;
-            this.venta.forEach(function(i) {
-                suma += i[2] 
+            this.ventas.venta.forEach(function(i) {
+                suma += i[3] 
             })
             this.pago.total = suma
             return this.pago.total
@@ -272,16 +361,11 @@ export default {
             }*/
             // eslint-disable-next-line no-unused-vars
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/venta", this.state).then(response => {
-               
-                console.log(this.state)
-                this.table.vencantidadunidades = this.state.vencantidadunidades
-                this.table.vencliente =  this.state.vencliente
-                this.table.veniva = this.state.veniva
-                this.table.venproducto = this.state.venproducto
-                this.table.venvalorpagar = this.state.venvalorpagar
-                console.log(this.venta)
-                this.venta.push(Object.values(this.table))
-                console.log(this.venta)
+                console.log(response.data)
+                this.ventas.venta.push(Object.values(response.data))
+                localStorage.setItem("data", JSON.stringify(this.ventas.venta));
+
+                console.log(this.ventas.venta)
 
                 this.pago.ivaModel = null
                 this.state.vencantidadunidades = null
@@ -302,10 +386,10 @@ export default {
             })
             // eslint-disable-next-line no-unused-vars
             .catch(e => {
-                console.log(e.response.data.message);
+                //console.log(e.response.data.message);
                 if(e.response.data.message == "No hay unidades!"){
                     this.$toast.show("El producto se encuentra agotado, no hay unidades disponibles!", {
-                    type: "error",
+                        type: "error",
                     });
                     return
                 }
@@ -315,6 +399,7 @@ export default {
                     });
                     return
                 }
+                
                 this.$toast.show("Hubo un error, vuelva a intentarlo", {
                     type: "error",
                 });
@@ -324,16 +409,41 @@ export default {
      
         },
         createInvoice: function(){
-            if(this.venta.length < 1){
+            //console.log(this.ventas.venta)
+            if(this.ventas.venta.length < 1){
                 this.$toast.show("Tiene que agregar almenos un producto.", {
                     type: "error",
                 });
                 return 
 
             }
-            axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/factura", this.venta).then(response => {
+           
+            if(this.pago.monto== "" || this.pago.monto == null){
+            this.$toast.show("Monto requerido.", {
+                type: "error",
+            });
+            return
+            }
+            if(this.pago.monto < this.pago.total ){
+                this.$toast.show("Fondos insuficientes.", {
+                    type: "error",
+            });
+            return
+            }
+           
+            axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/data", this.pago).then(response => {
+                console.log(response.data)
+                
+                
+            }).catch(e => {
+                console.log(e.response);
+                
+          })
+      
+            axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/factura", this.ventas.venta).then(response => {
                 //console.log(response.data)
                 this.pago.monto = null
+                this.ventas.venta = []
                 const linkSource = `data:application/pdf;base64,${response.data}`;
                 const downloadLink = document.createElement("a");
                 const fileName = "Factura.pdf";
@@ -346,9 +456,10 @@ export default {
                 })
                 
             }).catch(e => {
-                console.log(e.response.data.message);
+                console.log(e.response);
                 
           })
+      
         }
     }
 

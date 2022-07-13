@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color:#1B012B;">
+  <div style="background-color:#1B012B;padding:40px">
 
     <div class="d-flex justify-content-center" style="padding-top: 15px;">
           <h2 class="titulo2">Visualizar Cliente</h2>
