@@ -68,7 +68,7 @@ export default {
     },
     methods : {
         viewAll : function(){
-            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto").then(response => {
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/productoView").then(response => {
                 this.products.product = response.data;
                 //console.log(this.products.product)
             })
