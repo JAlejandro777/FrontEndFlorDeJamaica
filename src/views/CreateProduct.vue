@@ -12,7 +12,7 @@
             <label v-if="v$.procodigo.$silentErrors.length > 0" style="color:red;"> {{v$.procodigo.$silentErrors[0].$message}}</label>     
              <div class="form-group">
                     <label>Proveedor:</label>
-                    <select class="form-control"  id="select1" v-model="state.tblproveedor_proid">
+                    <select class="form-control"  id="select1" v-model="proveedores.proModel" @change="proChange">
                         <option v-for="item in proveedores.proveedor" :key="item.proid"> {{item.pronombre}}</option>
                     </select>                
             </div>
@@ -73,6 +73,8 @@ export default {
     name : "CreateProduct",
     setup(){
         onMounted(() => {
+                // eslint-disable-next-line no-unused-vars
+                axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto" ).then((result) => {})
                 axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/proveedor").then(response => {
                     proveedores.proveedor = response.data;
                     //console.log(this.productos.producto);
@@ -83,7 +85,8 @@ export default {
                 })       
         });
         const proveedores = reactive({
-            proveedor:[]
+            proveedor:[],
+            proModel: null
         });
         const state = reactive({
             procodigo : null,
@@ -113,8 +116,11 @@ export default {
     return { v$:  useVuelidate(rules, state), state, proveedores }    
     },
         methods :{
+        proChange : function(){
+            this.state.tblproveedor_proid = this.proveedores.proModel
+        },
         CreateProduct : function(){
-            if(this.v$.$invalid){
+            if(this.v$.$invalid || this.proveedores.proModel == null){
                 this.$toast.show("Ingrese los campos correctamente!", {
                 type: "error",
                 // all of other options may go here
@@ -128,6 +134,7 @@ export default {
               }
               
           });
+          console.log(this.state)
           // eslint-disable-next-line no-unused-vars
           axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto", this.state).then(response => {
             //console.log(response)
@@ -146,6 +153,12 @@ export default {
           })
           .catch(e => {
               //console.log(e.response.data.message);
+              if(e.response.data.message == "Código existente!"){
+                    this.$toast.show("El código del producto que ingreso ya existe, ingrese otro.", {
+                        type: "error",
+                    });
+                    return
+              }
               if(e.response.data.message == "Proveedor Incorrecto!"){
                 this.$toast.show("El código del proveedor que ingreso es incorrecto, vuelva a intentarlo", {
                     type: "error",

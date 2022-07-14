@@ -43,7 +43,7 @@
             // eslint-disable-next-line no-unused-vars
             axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/cliente" ).then((result) => {})
             // eslint-disable-next-line no-unused-vars
-            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto" ).then((result) => {})
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/productoView" ).then((result) => {})
             // eslint-disable-next-line no-unused-vars
             axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuario" ).then((result) => {})
 
