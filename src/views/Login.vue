@@ -6,8 +6,8 @@
         <div class="d-flex justify-content-center" style="height: 460px">
             <div class="formulario">
                 <div class="form-group">            
-                    <label>Usuario:</label>
-                    <input v-model="state.usuario" type="text" class="form-control"  placeholder="Ingrese Usuario">     
+                    <label>Correo:</label>
+                    <input v-model="state.usuario" type="text" class="form-control"  placeholder="Ingrese Correo">     
                 </div>
                 <label v-if="v$.usuario.$silentErrors.length > 0" style="color:red;"> {{v$.usuario.$silentErrors[0].$message}}</label>     
                 <div class="form-group">
@@ -49,7 +49,7 @@ export default {
     });
        const rules = {
 
-      usuario: { required: helpers.withMessage('Usuario requerido.', required)
+      usuario: { required: helpers.withMessage('Correo requerido.', required)
               },
       contrasena :{ required : helpers.withMessage('Contraseña requerida.', required)
       }

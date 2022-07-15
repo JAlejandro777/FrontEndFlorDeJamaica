@@ -44,7 +44,9 @@
             <label v-if="v$.prounidadesdisponibles.$silentErrors.length > 0" style="color:red;"> {{v$.prounidadesdisponibles.$silentErrors[0].$message}}</label>
             <div class="form-group">
                 <label>Fecha de Ingreso:</label>
-                <input type="date" class="form-control" placeholder="Ingrese Fecha Ingreso" v-model="state.profechaingreso">
+                <br>
+                <!--<input type="date" class="form-control" placeholder="Ingrese Fecha Ingreso" v-model="state.profechaingreso">-->
+                <h3>{{fechaActual}}</h3>
             </div>
             <label v-if="v$.profechaingreso.$silentErrors.length > 0" style="color:red;"> {{v$.profechaingreso.$silentErrors[0].$message}}</label>
             <div class="form-group">
@@ -97,7 +99,7 @@ export default {
             procategoria : null,
             propreciosugerido : null,
             prounidadesdisponibles : null,
-            profechaingreso : null,
+            profechaingreso : "",
             profechavencimiento : null
 
 
@@ -115,11 +117,24 @@ export default {
         } 
     return { v$:  useVuelidate(rules, state), state, proveedores }    
     },
-        methods :{
+    computed: {
+        fechaActual: function () {
+            return this.fecha()
+        },
+    
+    },
+    methods :{
+        fecha: function(){
+            let date = new Date()
+            this.state.profechaingreso = date.toISOString().split('T')[0]
+            return date.toDateString();
+        },
         proChange : function(){
             this.state.tblproveedor_proid = this.proveedores.proModel
         },
         CreateProduct : function(){
+            console.log(this.state.profechaingreso)
+            console.log(this.state.profechavencimiento)
             if(this.v$.$invalid || this.proveedores.proModel == null){
                 this.$toast.show("Ingrese los campos correctamente!", {
                 type: "error",
@@ -127,6 +142,13 @@ export default {
                 });
                 return
             }
+            if(this.state.profechaingreso >= this.state.profechavencimiento){
+                this.$toast.show("Ingrese una fecha de vencimiento posterior a la fecha de ingreso!", {
+                    type: "error",
+                });
+                return
+
+            } 
         // eslint-disable-next-line no-unused-vars
         Object.entries(this.proveedores.proveedor).forEach(([key, value]) => {
               if(Object.values(value)[1] == this.state.tblproveedor_proid){
