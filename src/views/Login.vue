@@ -9,10 +9,14 @@
                     <label>Correo:</label>
                     <input v-model="state.usuario" type="text" class="form-control"  placeholder="Ingrese Correo">     
                 </div>
-                <label v-if="v$.usuario.$silentErrors.length > 0" style="color:red;"> {{v$.usuario.$silentErrors[0].$message}}</label>     
+                <label v-if="v$.usuario.$silentErrors.length > 0" style="color:red;">{{v$.usuario.$silentErrors[0].$message}}</label>     
                 <div class="form-group">
                     <label>Contraseña:</label>
-                    <input v-model="state.contrasena" type="password" class="form-control" placeholder="Ingrese Contraseña">
+                        <input v-if="!state.flag" v-model="state.contrasena" type="password" class="form-control" placeholder="Ingrese Contraseña">
+                        <input v-if="state.flag" v-model="state.contrasena" type="text" class="form-control" placeholder="Ingrese Contraseña">
+                        <i v-if="!state.flag && v$.contrasena.$silentErrors.length == 0" class="fas fa-eye" v-on:click="state.flag = true"></i>
+                        <i v-if="state.flag && v$.contrasena.$silentErrors.length == 0" class="fas fa-eye-slash" v-on:click="state.flag = false"></i>
+                    
                 </div>
                 <label v-if="v$.contrasena.$silentErrors.length > 0" style="color:red;"> {{v$.contrasena.$silentErrors[0].$message}}</label>     
                 <div class="d-flex justify-content-center" style="padding-top: 5px;">
@@ -44,7 +48,8 @@ export default {
       });
       const state = reactive({
         usuario : null,
-        contrasena: null
+        contrasena: null,
+        flag : null
 
     });
        const rules = {
