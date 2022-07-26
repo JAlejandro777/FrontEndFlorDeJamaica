@@ -51,7 +51,7 @@
             <label v-if="v$.profechaingreso.$silentErrors.length > 0" style="color:red;"> {{v$.profechaingreso.$silentErrors[0].$message}}</label>
             <div class="form-group">
                 <label>Fecha de Vencimiento:</label>
-                <input type="date" class="form-control" placeholder="Ingrese Vencimiento" v-model="state.profechavencimiento">
+                <input type="date" id="today" min="2002-07-12" class="form-control" placeholder="Ingrese Vencimiento" v-model="state.profechavencimiento">
             </div>
             <label v-if="v$.profechavencimiento.$silentErrors.length > 0" style="color:red;"> {{v$.profechavencimiento.$silentErrors[0].$message}}</label>
             
@@ -84,7 +84,9 @@ export default {
                 // eslint-disable-next-line no-unused-vars
                 .catch(e => {
                     //console.log(e);
-                })       
+                })
+                const myElement = document.getElementById("today");
+                myElement.min = state.profechaingreso
         });
         const proveedores = reactive({
             proveedor:[],
