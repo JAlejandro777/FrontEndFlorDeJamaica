@@ -4,32 +4,61 @@
             <h2 class="titulo2">Informes</h2>
         </div>
         <div class="d-flex justify-content-center" style="height: 450px">
-            <div class="formulario">
-                <div class="d-flex justify-content-center" style="padding-top: 20px;">
+            <div style=" padding: 30px;
+                width: 400px;
+                height: 400px;
+                border: 5px solid rgb(255, 255, 255);
+                border-radius: 20px;
+                background-color: rgb(52, 58, 60);
+                color: #efefef;">
+                <div v-if="reporte!='ventas'" class="d-flex justify-content-center" style="padding-top: 20px;">
                     <button class="btn btn-light" v-on:click="informeVentas">
                             Informe de Ventas
                     </button>
                 </div>
-                <div class="d-flex justify-content-center" style="padding-top: 20px;">
+                <div v-if="reporte=='ventas'" class="d-flex justify-content-center" style="padding-top: 20px;">
+                    <button class="btn btn-light">
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Informe de Ventas
+                    </button>
+                </div>
+                <div v-if="reporte!='clientes'" class="d-flex justify-content-center" style="padding-top: 20px;">
                     <button class="btn btn-light" v-on:click="informeClientes">
                             Informe de Clientes
                     </button>
                 </div>
-                <div class="d-flex justify-content-center" style="padding-top: 20px;">
-                    <button class="btn btn-light" v-on:click="informeUsuarios">
-                            Informe de Usuarios
+                <div v-if="reporte=='clientes'" class="d-flex justify-content-center" style="padding-top: 20px;">
+                    <button class="btn btn-light">
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Informe de Clientes
                     </button>
                 </div>
-                <div class="d-flex justify-content-center" style="padding-top: 20px;">
+                <div v-if="reporte!='usuarios'" class="d-flex justify-content-center" style="padding-top: 20px;">
+                    <button class="btn btn-light" v-on:click="informeUsuarios">
+                        Informe de Usuarios
+                    </button>
+                </div>
+                <div v-if="reporte=='usuarios'" class="d-flex justify-content-center" style="padding-top: 20px;">
+                    <button class="btn btn-light">
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Informe de Usuarios
+                    </button>
+                </div>
+                <div v-if="reporte!='productos'" class="d-flex justify-content-center" style="padding-top: 20px;">
                     <button class="btn btn-light" v-on:click="informeProductos">
                             Informe de productos
+                    </button>
+                </div>
+                <div v-if="reporte=='productos'" class="d-flex justify-content-center" style="padding-top: 20px;">
+                    <button class="btn btn-light">
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Informe de productos
                     </button>
                 </div>
             </div>
         </div>
     </div>
  </template>
- 
  <script>
  import axios from 'axios';
  import {  onMounted} from "vue";
@@ -51,17 +80,23 @@
         });
   
     },
+    data: function () {
+        return {
+        reporte: null
+        }
+    },
      methods : {
         informeVentas : function(){
-                axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/venta").then(response => {
-                //console.log(response.data)
+            this.reporte = "ventas";
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/venta").then(response => {
+                    //console.log(response.data)
                     const linkSource = `data:application/pdf;base64,${response.data}`;
                     const downloadLink = document.createElement("a");
                     const fileName = "ReporteVentas.pdf";
                     downloadLink.href = linkSource;
                     downloadLink.download = fileName;
                     downloadLink.click();
-
+                    this.reporte = null;
                     this.$swal.fire({
                         title: 'Reporte Generado!!',
                         icon: 'success',
@@ -73,10 +108,11 @@
                         this.$toast.show("Hubo un error, vuelva a intentarlo", {
                         type: "error",
                         });
-                })
+            })
         },
         informeClientes : function(){
-             axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/clientes").then(response => {
+            this.reporte = "clientes";
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/clientes").then(response => {
                 //console.log(response.data)
                     const linkSource = `data:application/pdf;base64,${response.data}`;
                     const downloadLink = document.createElement("a");
@@ -84,7 +120,7 @@
                     downloadLink.href = linkSource;
                     downloadLink.download = fileName;
                     downloadLink.click();
-
+                    this.reporte = null;
                     this.$swal.fire({
                         title: 'Reporte Generado!!',
                         icon: 'success',
@@ -99,7 +135,8 @@
                 })
         },
         informeUsuarios : function(){
-                axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuarios").then(response => {
+            this.reporte = "usuarios";
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuarios").then(response => {
                 //console.log(response.data)
                     const linkSource = `data:application/pdf;base64,${response.data}`;
                     const downloadLink = document.createElement("a");
@@ -107,7 +144,7 @@
                     downloadLink.href = linkSource;
                     downloadLink.download = fileName;
                     downloadLink.click();
-
+                    this.reporte = null;
                     this.$swal.fire({
                         title: 'Reporte Generado!!',
                         icon: 'success',
@@ -119,10 +156,11 @@
                         this.$toast.show("Hubo un error, vuelva a intentarlo", {
                         type: "error",
                         });
-                })
+            })
         },
         informeProductos : function(){
-               axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/productos").then(response => {
+            this.reporte = "productos";
+            axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/productos").then(response => {
                 //console.log(response.data)
                     const linkSource = `data:application/pdf;base64,${response.data}`;
                     const downloadLink = document.createElement("a");
@@ -130,6 +168,7 @@
                     downloadLink.href = linkSource;
                     downloadLink.download = fileName;
                     downloadLink.click();
+                    this.reporte = null;
                     this.$swal.fire({
                         title: 'Reporte Generado!!',
                         icon: 'success',
@@ -141,7 +180,7 @@
                         this.$toast.show("Hubo un error, vuelva a intentarlo", {
                         type: "error",
                         });
-                })
+            })
         }
 
      }
