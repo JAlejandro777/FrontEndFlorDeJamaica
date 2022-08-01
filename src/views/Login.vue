@@ -199,7 +199,7 @@ export default {
                 return;
             }
             if(this.newPassword.pass1 != this.newPassword.pass2){
-                this.$toast.show("La contraseña no coinciden.", {
+                this.$toast.show("La contraseñas no coinciden.", {
                     type: "error",
                 });
                 return;
@@ -213,6 +213,8 @@ export default {
                         icon: 'success',
                     })
                 this.modal.flag3 = false
+                this.newPassword.pass1 = null
+                this.newPassword.pass2 = null
                 
             // eslint-disable-next-line no-unused-vars
             }).catch(e => {
@@ -246,6 +248,7 @@ export default {
                 });
                 this.modal.flag2 = false
                 this.modal.flag3 = true
+                this.codigo.code = null
                 
             // eslint-disable-next-line no-unused-vars
             }).catch(e => {
@@ -259,6 +262,14 @@ export default {
             })
         },
         sendCode: function(){
+            this.newPassword.pass1 = null
+            this.newPassword.pass2 = null
+            this.codigo.code = null
+            if(this.v$.correo.$silentErrors.length > 0){
+                this.$toast.show("El correo que ingreso es incorrecto!", {
+                        type: "error",
+                }); 
+            }
             //console.log(this.state.correo)
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/recoverPassword", this.state).then(response => {
                 //console.log(response.data)
@@ -267,14 +278,16 @@ export default {
                 });
                 this.modal.flag = false
                 this.modal.flag2 = true
+                this.state.correo = null
+                this.state.contrasena = null
                 
             // eslint-disable-next-line no-unused-vars
             }).catch(e => {
                 //console.log(e.response.data.message);
                 if(e.response.data.message == "El correo que ingreso no corresponde a ningun usuario."){
                     this.$toast.show(e.response.data.message, {
-                    type: "error",
-                }); 
+                        type: "error",
+                    }); 
                 }
                 
           })
