@@ -199,7 +199,7 @@ export default {
                 return;
             }
             if(this.newPassword.pass1 != this.newPassword.pass2){
-                this.$toast.show("La contraseñas no coinciden.", {
+                this.$toast.show("Las contraseñas no coinciden.", {
                     type: "error",
                 });
                 return;
