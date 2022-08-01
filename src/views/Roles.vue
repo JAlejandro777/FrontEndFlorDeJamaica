@@ -50,7 +50,7 @@ import { reactive, onMounted } from "vue";
 import useVuelidate from '@vuelidate/core'
 import { required, helpers  } from '@vuelidate/validators'
 import axios from 'axios';
-  import {
+import {
     MDBModal,
     MDBModalHeader,
     //MDBModalTitle,
@@ -71,7 +71,7 @@ export default {
     },
  setup () {
       onMounted(() => {
-          console.log(exampleModal.flag)
+          //console.log(exampleModal.flag)
       });
       const exampleModal = reactive({
         flag:false
@@ -120,8 +120,9 @@ export default {
                   type: "error",
                 });
               }
+            // eslint-disable-next-line no-unused-vars
             }).catch(e => {
-                console.log(e);
+                //console.log(e);
                 this.$toast.show("Hubo un error, vuelva a intentarlo", {
                 type: "error",
                 });

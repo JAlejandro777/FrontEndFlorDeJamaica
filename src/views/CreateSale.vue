@@ -59,7 +59,7 @@
                     <h6>Cliente: <strong>{{cliente}}</strong></h6>
                 </div>
                 
-                <div class="col-12" >
+                <div v-if="ventas.venta.length > 0" class="col-12" >
                         <table class="table table-striped table-dark" >
                             <thead>
                                 <tr>
@@ -141,7 +141,7 @@ export default {
         onMounted(() => {  
             state.vencliente = localStorage.getItem("cliente")
             if(JSON.parse(localStorage.getItem("data")) != null){
-                console.log(ventas.venta)
+                //console.log(ventas.venta)
                 ventas.venta = JSON.parse(localStorage.getItem("data"))
             }  
             axios.get("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto").then(response => {
@@ -211,7 +211,7 @@ export default {
         },
         // eslint-disable-next-line no-unused-vars
         editar:function(array, i){
-            console.log("Editar:" + this.ventas.venta)
+            //console.log("Editar:" + this.ventas.venta)
             this.ventas.id = array[0]
             this.ventas.index = i
             this.ventas.flag = false
@@ -225,7 +225,7 @@ export default {
             }
             this.state.venproducto = array[4]
             this.state.venvalorpagar = array[3]
-            console.log(this.ventas.venta)
+            //console.log(this.ventas.venta)
 
         },
         deleteSale: function(id,index){
@@ -241,21 +241,21 @@ export default {
                 }
             // eslint-disable-next-line no-unused-vars
             }).catch(e => {
-                console.log(e)
+                //console.log(e)
             })
  
         },
         updateSale: function(){
-            console.log(this.ventas.venta)
+            //console.log(this.ventas.venta)
             let url = "https://backendcentronaturista.herokuapp.com/FlorDeJamaica/sale/" + this.ventas.id
             // eslint-disable-next-line no-unused-vars
             axios.put(url,this.state).then(response => {
-                    //console.log(Object.values(response.data))
-                    console.log(this.ventas.venta)
-                    console.log(this.ventas.index)
+                    //console.log(response)
+                    //console.log(this.ventas.venta)
+                    //console.log(this.ventas.index)
                     //this.ventas.venta.pop(0);
                     this.ventas.venta.splice(this.ventas.index,1,Object.values(response.data));
-                    console.log(this.ventas.venta)
+                    //console.log(this.ventas.venta)
                     localStorage.setItem("data", JSON.stringify(this.ventas.venta));
     
                     this.pago.ivaModel = null
@@ -277,7 +277,7 @@ export default {
                 
             // eslint-disable-next-line no-unused-vars
             }).catch(e => {
-                console.log(e)
+                //console.log(e)
             })
         },
         validation: function(){
@@ -361,11 +361,11 @@ export default {
             }*/
             // eslint-disable-next-line no-unused-vars
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/venta", this.state).then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 this.ventas.venta.push(Object.values(response.data))
                 localStorage.setItem("data", JSON.stringify(this.ventas.venta));
 
-                console.log(this.ventas.venta)
+                //console.log(this.ventas.venta)
 
                 this.pago.ivaModel = null
                 this.state.vencantidadunidades = null
@@ -431,12 +431,14 @@ export default {
             return
             }
            
+            // eslint-disable-next-line no-unused-vars
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/data", this.pago).then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 
                 
+            // eslint-disable-next-line no-unused-vars
             }).catch(e => {
-                console.log(e.response);
+                //console.log(e.response);
                 
           })
       
@@ -444,6 +446,7 @@ export default {
                 //console.log(response.data)
                 this.pago.monto = null
                 this.ventas.venta = []
+                localStorage.setItem("data", JSON.stringify(this.ventas.venta));
                 const linkSource = `data:application/pdf;base64,${response.data}`;
                 const downloadLink = document.createElement("a");
                 const fileName = "Factura.pdf";
@@ -455,8 +458,9 @@ export default {
                     icon: 'success',
                 })
                 
+            // eslint-disable-next-line no-unused-vars
             }).catch(e => {
-                console.log(e.response);
+                //console.log(e.response);
                 
           })
       

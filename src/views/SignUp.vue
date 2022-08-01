@@ -3,7 +3,7 @@
       <div class="d-flex justify-content-center" style="padding-top: 15px;">
           <h2 class="titulo2">Crear Usuario</h2>
       </div>
-      <div class="d-flex justify-content-center" style="height: 800px">
+      <div class="d-flex justify-content-center" style="height: 820px">
           <div class="formulario2">
               <div class="form-group">
                   <label>Cargo:</label>
@@ -33,9 +33,12 @@
               <label v-if="v$.usucelular.$silentErrors.length > 0" style="color:red;"> {{v$.usucelular.$silentErrors[0].$message}}</label>     
               <div class="form-group">
                   <label>Constraseña:</label>
-                  <input type="password" class="form-control" placeholder="Ingrese Contraseña" v-model="state.usucontrasena">
+                  <input v-if="!flag.flag" type="password" class="form-control" placeholder="Ingrese Contraseña" v-model="state.usucontrasena">
+                  <input v-if="flag.flag" type="text" class="form-control" placeholder="Ingrese Contraseña" v-model="state.usucontrasena">              
               </div>
-
+              <i v-if="(!flag.flag) && (state.usucontrasena != null) && (state.usucontrasena != '')" class="fas fa-eye" v-on:click="flag.flag = true"></i>
+              <i v-if="(flag.flag) && (state.usucontrasena != null) && (state.usucontrasena != '')" class="fas fa-eye-slash" v-on:click="flag.flag = false"></i>
+              <div v-if="(state.usucontrasena != null) && (state.usucontrasena != '')"></div>
               <label v-if="v$.usucontrasena.$silentErrors.length > 0" style="color:red;"> {{v$.usucontrasena.$silentErrors[0].$message}}</label>     
               <Popper v-if="v$.usucontrasena.$silentErrors.length > 0" :show="showPopper"  placement='top'>
                   <i  @mouseover="showPopper = true" @mouseleave="showPopper = false" class="fas fa-info-circle" style="padding-left:10px" ></i>
@@ -91,7 +94,10 @@ export default {
         usucorreo: "",
         usucontrasena: ""
 
-    });
+     });
+     const flag = reactive({
+        flag:null
+     })
        const rules = {
 
       usucedula: { required: helpers.withMessage('Cedula requerida.', required),
@@ -112,7 +118,7 @@ export default {
                   ), 
       }
   } 
-    return { v$:  useVuelidate(rules, state), state , roles
+    return { v$:  useVuelidate(rules, state), state , roles, flag
     }
   },
   data() {

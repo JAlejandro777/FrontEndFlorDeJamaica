@@ -135,8 +135,8 @@ export default {
             this.state.tblproveedor_proid = this.proveedores.proModel
         },
         CreateProduct : function(){
-            console.log(this.state.profechaingreso)
-            console.log(this.state.profechavencimiento)
+            //console.log(this.state.profechaingreso)
+            //console.log(this.state.profechavencimiento)
             if(this.v$.$invalid || this.proveedores.proModel == null){
                 this.$toast.show("Ingrese los campos correctamente!", {
                 type: "error",
@@ -158,7 +158,7 @@ export default {
               }
               
           });
-          console.log(this.state)
+          //console.log(this.state)
           // eslint-disable-next-line no-unused-vars
           axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/producto", this.state).then(response => {
             //console.log(response)
