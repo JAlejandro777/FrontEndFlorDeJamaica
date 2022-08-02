@@ -60,7 +60,7 @@
       <h2>Código de recuperación</h2>
     </MDBModalHeader>
     <MDBModalBody>
-        <p align="start">Ingresa código de recuperación que se acaba de enviar al correo.</p>            
+        <p align="start">Ingresa código de recuperación que se acaba de enviar al correo <strong>{{state.correo}}</strong>.</p>            
         <input type="text" class="form-control" placeholder="Ingrese Código" v-model="codigo.code" required minlength="1" maxlength="4">
         <label v-if="codigo.code == null || codigo.code == ''" style="color:red;padding-top:10px"> Código Requerido.</label>     
     </MDBModalBody>

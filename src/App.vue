@@ -66,7 +66,6 @@
 </div>
 <router-view v-on:getData="getData">
 </router-view>
-<!--<Login @getData="getData"/>-->
 </template>
 
 <script>
