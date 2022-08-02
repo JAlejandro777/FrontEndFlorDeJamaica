@@ -351,6 +351,12 @@ export default {
                 });
                 return
             }
+            if(String(this.state.vencantidadunidades).length > 4){
+                this.$toast.show("Ingrese máximo un número de 4 cifras.", {
+                    type: "error",
+                });
+                return
+            }
             /*if(this.pago.tarjeta == null || this.pago.tarjeta == false){
                 if(this.pago.monto == "" || this.pago.devolucion.length == 0 ){
                     this.$toast.show("Ingrese los campos correctamente!", {
