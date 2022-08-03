@@ -14,7 +14,7 @@
               <label v-if="state.tblrol_rolid == null || state.tblrol_rolid == ''" style="color:red;"> Cargo Requerido.</label>     
               <div class="form-group">            
                   <label>Nombre:</label>
-                  <input type="text" class="form-control"  placeholder="Ingrese Nombre" v-model="state.usunombre">
+                  <input type="text" class="form-control"  placeholder="Ingrese Nombre" v-model="state.usunombre" maxlength="35">
               </div>
               <label v-if="v$.usunombre.$silentErrors.length > 0" style="color:red;"> {{v$.usunombre.$silentErrors[0].$message}}</label>     
               <div class="form-group">
@@ -188,7 +188,6 @@ export default {
               }); 
               return; 
           }
-      
           await axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/verifyCodeActivate", this.codigo).then(response => {
               //console.log(response.data)
               this.flag.flagCode = true

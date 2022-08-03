@@ -1,7 +1,7 @@
 <template>
 <div class="d-flex justify-content-center" style="background-color:#1B012B;">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark"  :key="menu.sesion"  v-if="menu.sesion  != 'activa'">
+<nav style="border-radius:10px" class="navbar navbar-expand-lg navbar-dark bg-dark"  :key="menu.sesion"  v-if="menu.sesion  != 'activa'">
   <a class="navbar-brand" href="#">Menu</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -19,9 +19,10 @@
   </div>
 </nav>
 
-
+<div v-if="menu.sesion == 'activa'" id="txtBt" style="background-color:black;padding:20px;border-top-left-radius:10px;border-bottom-left-radius:10px;color:white">
+    {{menu.rol}}
+</div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-if="menu.sesion == 'activa'" :key="menu.sesion">
-  <a class="navbar-brand" href="#">Menu</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -59,10 +60,13 @@
       <li class="nav-item active">
         <a v-on:click="cerrarSesion" id="txtBt" class="btn btn-dark btn-lg" href="#">Cerrar Sesión<span class="sr-only">(current)</span></a>
       </li>
-
     </ul>
   </div>
 </nav>
+<div v-if="menu.sesion == 'activa'" id="txtBt" style="background-color:black;padding:20px;border-top-right-radius:10px;border-bottom-right-radius:10px;color:white">
+    {{menu.nombreUsu}}
+    <i style="padding-left:5px" class="fas fa-user-circle"></i>
+</div>
 </div>
 <router-view v-on:getData="getData">
 </router-view>
@@ -79,7 +83,8 @@ export default {
         });
       const menu = reactive({
             sesion : localStorage.getItem('sesion'),
-            rol : localStorage.getItem('rol')
+            rol : localStorage.getItem('rol'),
+            nombreUsu : localStorage.getItem('nombre')
         });
         return { menu }
   },
@@ -128,9 +133,10 @@ export default {
       this.$router.push({ name: "Login" })
      
     },
-    getData : function(data, data2){
+    getData : function(data, data2, data3){
         this.menu.sesion = data
         this.menu.rol = data2
+        this.menu.nombreUsu = data3
     },
     
 

@@ -308,12 +308,13 @@ export default {
         }
         //console.log(this.state.contrasena)
          axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuarios", this.state ).then((result) => {
-            //console.log(result.data);
-            if(result.data != "NO"){
+            //console.log(result.data[0]);
+            if(result.data.length > 1){
                 localStorage.setItem('sesion', 'activa');
-                localStorage.setItem('user', this.state.correo);
-                localStorage.setItem('rol', result.data);
-                this.$emit("getData", localStorage.getItem('sesion'), localStorage.getItem('rol'));
+                localStorage.setItem('correo', this.state.correo);
+                localStorage.setItem('rol', result.data[0]);
+                localStorage.setItem('nombre', result.data[1]);
+                this.$emit("getData", localStorage.getItem('sesion'), localStorage.getItem('rol'), localStorage.getItem('nombre'));
                 this.$toast.show("Inicio de sesión correcto", {
                     type: "success",
                 });
