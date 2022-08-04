@@ -320,12 +320,15 @@ export default {
                 });
                 this.$router.push({ name: "Home" }); 
             }
-            else{
-                this.$toast.show("Credenciales incorrectas", {
-                    type: "error",
-                }); 
-            }
-        })
+        }).catch(e => {
+                //console.log(e.response.data.message);
+                if(e.response.data.message == "Credenciales incorrectas!"){
+                    this.$toast.show(e.response.data.message, {
+                        type: "error",
+                    }); 
+                }
+                
+          })
             
         }
     }
