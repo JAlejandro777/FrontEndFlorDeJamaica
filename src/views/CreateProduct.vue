@@ -95,7 +95,7 @@ export default {
         const state = reactive({
             procodigo : null,
             tblproveedor_proid: null,
-            tblusuario_usuid : localStorage.getItem('user'),
+            tblusuario_usuid : localStorage.getItem('nombre'),
             pronombre : null,
             procaracteristica : null,
             procategoria : null,

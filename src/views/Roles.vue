@@ -24,17 +24,20 @@
           </div>
     </div>
   <MDBModal
-    id="exampleModal"
+    id="modal"
     tabindex="-1"
-    labelledby="exampleModalLabel"
-    v-model="exampleModal.flag"
+    labelledby="modalLabel"
+    v-model="modal.flag"
   >
     <MDBModalHeader>
       <h2>Contraseña super usuario</h2>
     </MDBModalHeader>
     <MDBModalBody>                  
-      <input type="password" class="form-control" placeholder="Ingrese Contraseña" v-model="contraseña.contraseña">
+      <input v-if="(!modal.flagcon)" type="password" class="form-control" placeholder="Ingrese Contraseña" v-model="contraseña.contraseña">
+      <input v-if="(modal.flagcon)" type="text" class="form-control" placeholder="Ingrese Contraseña" v-model="contraseña.contraseña">
       <label v-if="contraseña.contraseña == null || contraseña.contraseña == ''" style="color:red;padding-top:10px"> Contraseña Requerida.</label>     
+      <i v-if="(!modal.flagcon) && (contraseña.contraseña != null) && (contraseña.contraseña != '')" class="fas fa-eye" v-on:click="modal.flagcon = true"></i>
+      <i v-if="(modal.flagcon) && (contraseña.contraseña != null) && (contraseña.contraseña != '')" class="fas fa-eye-slash" v-on:click="modal.flagcon = false"></i>
     </MDBModalBody>
     <MDBModalFooter>
       <MDBBtn color="secondary" @click="exampleModal.flag = false">Close</MDBBtn>
@@ -73,8 +76,10 @@ export default {
       onMounted(() => {
           //console.log(exampleModal.flag)
       });
-      const exampleModal = reactive({
-        flag:false
+      const modal = reactive({
+        flag:false,
+        flagcon: false
+
       });  
       const state = reactive({
         rolnombre : null,
@@ -88,15 +93,9 @@ export default {
       rolnombre: { required: helpers.withMessage('Nombre Rol requerido.', required)},
       rolpermisos :{ required : helpers.withMessage('Permisos Rol requerida.', required)}
   } 
-    return { v$:  useVuelidate(rules, state), state, exampleModal,contraseña}
+    return { v$:  useVuelidate(rules, state), state, modal,contraseña}
   },
-  data() {
-      return {
-        modalShow: false
-      }
-    },
-
-      methods :{
+    methods :{
         verifyPass:function(){
             if(this.contraseña.contraseña == null || this.contraseña.contraseña == ''){
               this.$toast.show("Ingrese el campo correctamente!", {
@@ -112,7 +111,7 @@ export default {
                   type: "success",
                 });
                 this.CreateRol()
-                this.exampleModal.flag = false
+                this.modal.flag = false
                 this.contraseña.contraseña = null
               }
               else{
@@ -137,7 +136,7 @@ export default {
                 });
                 return
             }
-            this.exampleModal.flag = true
+            this.modal.flag = true
 
         },
         CreateRol : function(){
