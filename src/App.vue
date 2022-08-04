@@ -2,7 +2,7 @@
 <div class="d-flex justify-content-center" style="background-color:#1B012B;">
 
 <nav style="border-radius:10px" class="navbar navbar-expand-lg navbar-dark bg-dark"  :key="menu.sesion"  v-if="menu.sesion  != 'activa'">
-  <a class="navbar-brand" href="#">Menu</a>
+  <i style="padding:3px;color:white" class="fas fa-user-circle"></i>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
