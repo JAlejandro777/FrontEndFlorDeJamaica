@@ -13,8 +13,8 @@
                         <select class="form-control"  id="select1" v-model="state.vencliente" @change="clienteLS">
                             <option v-for="item in clientes.cliente" :key="item.clicedula"> {{item.clinombre}}</option>
                         </select> 
-                        <label v-if="state.vencliente == null || state.vencliente == ''" style="color:red;"> Cliente Requerido.</label>                    
                     </div>
+                    <label v-if="state.vencliente == null || state.vencliente == ''" style="color:red;"> Cliente Requerido.</label>                    
                 </div>
                 <div class="col-4">
                     <div class="form-group">            
@@ -22,15 +22,15 @@
                         <select class="form-control"  id="select1" v-model="state.venproducto">
                             <option v-for="item in productos.producto" :key="item.procodigo"> {{item.pronombre}}</option>
                         </select>
-                        <label v-if="state.venproducto == null || state.venproducto == ''" style="color:red;"> Producto Requerido.</label>  
                     </div>
+                    <label v-if="state.venproducto == null || state.venproducto == ''" style="color:red;"> Producto Requerido.</label>  
                 </div>
                 <div class="col-4">
                     <div class="form-group" >
                         <label>Unidades:</label>
                         <input type="number" class="form-control" placeholder="Unidades" v-model="state.vencantidadunidades">
                     </div>
-                      <label v-if="v$.vencantidadunidades.$silentErrors.length > 0" style="color:red;"> {{v$.vencantidadunidades.$silentErrors[0].$message}}</label>
+                    <label v-if="v$.vencantidadunidades.$silentErrors.length > 0" style="color:red;"> {{v$.vencantidadunidades.$silentErrors[0].$message}}</label>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
@@ -39,8 +39,8 @@
                             <option>Sin IVA</option>
                             <option>19%</option>
                         </select>
-                        <label v-if="pago.ivaModel == null || pago.ivaModel == ''" style="color:red;"> Producto Requerido.</label>
                     </div>
+                    <label v-if="pago.ivaModel == null || pago.ivaModel == ''" style="color:red;"> IVA Requerida.</label>
                 </div>
                 <div class="col-4">
                     <div class="form-group" style="padding-top:35px">
@@ -141,8 +141,10 @@ import { reactive, onMounted } from "vue";
 export default {
     name : "CreateSale",
     setup(){
-        onMounted(() => {  
-            state.vencliente = localStorage.getItem("cliente")
+        onMounted(() => {
+            if(localStorage.getItem("cliente") != "null"){
+                state.vencliente = localStorage.getItem("cliente")
+            }   
             if(JSON.parse(localStorage.getItem("data")) != null){
                 //console.log(ventas.venta)
                 ventas.venta = JSON.parse(localStorage.getItem("data"))
