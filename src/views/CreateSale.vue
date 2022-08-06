@@ -12,7 +12,8 @@
                         <label>Cliente:</label>
                         <select class="form-control"  id="select1" v-model="state.vencliente" @change="clienteLS">
                             <option v-for="item in clientes.cliente" :key="item.clicedula"> {{item.clinombre}}</option>
-                        </select>                
+                        </select> 
+                        <label v-if="state.vencliente == null || state.vencliente == ''" style="color:red;"> Cliente Requerido.</label>                    
                     </div>
                 </div>
                 <div class="col-4">
@@ -20,7 +21,8 @@
                         <label>Producto:</label>
                         <select class="form-control"  id="select1" v-model="state.venproducto">
                             <option v-for="item in productos.producto" :key="item.procodigo"> {{item.pronombre}}</option>
-                        </select>    
+                        </select>
+                        <label v-if="state.venproducto == null || state.venproducto == ''" style="color:red;"> Producto Requerido.</label>  
                     </div>
                 </div>
                 <div class="col-4">
@@ -37,6 +39,7 @@
                             <option>Sin IVA</option>
                             <option>19%</option>
                         </select>
+                        <label v-if="pago.ivaModel == null || pago.ivaModel == ''" style="color:red;"> Producto Requerido.</label>
                     </div>
                 </div>
                 <div class="col-4">
