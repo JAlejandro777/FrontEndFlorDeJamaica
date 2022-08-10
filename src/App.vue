@@ -19,11 +19,11 @@
   </div>
 </nav>
 
-<div v-if="menu.sesion == 'activa'" id="txtBt" style="background-color:black;padding:20px;border-top-left-radius:10px;border-bottom-left-radius:10px;color:white">
+<div v-if="menu.sesion == 'activa' && !menu.flagMovil" id="txtBt" style="background-color:black;padding:20px;border-top-left-radius:10px;border-bottom-left-radius:10px;color:white">
     {{menu.rol}}
 </div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-if="menu.sesion == 'activa'" :key="menu.sesion">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button @click="movil" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -63,7 +63,7 @@
     </ul>
   </div>
 </nav>
-<div v-if="menu.sesion == 'activa'" id="txtBt" style="background-color:black;padding:20px;border-top-right-radius:10px;border-bottom-right-radius:10px;color:white">
+<div v-if="menu.sesion == 'activa' && !menu.flagMovil" id="txtBt" style="background-color:black;padding:20px;border-top-right-radius:10px;border-bottom-right-radius:10px;color:white">
     {{menu.nombreUsu}}
     <i style="padding-left:5px" class="fas fa-user-circle"></i>
 </div>
@@ -84,11 +84,19 @@ export default {
       const menu = reactive({
             sesion : localStorage.getItem('sesion'),
             rol : localStorage.getItem('rol'),
-            nombreUsu : localStorage.getItem('nombre')
+            nombreUsu : localStorage.getItem('nombre'),
+            flagMovil : false
         });
         return { menu }
   },
   methods: {
+    movil: function() {
+      if(this.menu.flagMovil == false){
+         this.menu.flagMovil = true
+      }else{
+        this.menu.flagMovil = false
+      }
+    },
   
     loadHome: function () {
        this.$router.push({ name: "Home" });

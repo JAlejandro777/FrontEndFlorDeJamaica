@@ -19,7 +19,7 @@
                 <div class="col-4">
                     <div class="form-group">            
                         <label>Producto:</label>
-                        <select class="form-control"  id="select1" v-model="state.venproducto">
+                        <select class="form-control" id="select1" v-model="state.venproducto">
                             <option v-for="item in productos.producto" :key="item.procodigo"> {{item.pronombre}}</option>
                         </select>
                     </div>
@@ -317,12 +317,15 @@ export default {
                 return;
             }
             this.productos.precioProducto = this.state.venproducto
+            console.log(this.productos.producto)
             // eslint-disable-next-line no-unused-vars
             Object.entries(this.productos.producto).forEach(([key, value]) => {
-                if(Object.values(value)[3] == this.productos.precioProducto ){
-                    this.productos.precioProducto = Object.values(value)[6] 
+                console.log(value.propreciosugerido)
+                if(value.pronombre == this.productos.precioProducto ){
+                    this.productos.precioProducto = value.propreciosugerido
                 }
             });
+    
             if(this.pago.ivaModel == "19%"){
                 this.pago.iva = 0.19
                 this.productos.precioProducto  = this.productos.precioProducto * this.state.vencantidadunidades
