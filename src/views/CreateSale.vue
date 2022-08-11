@@ -101,21 +101,24 @@
                         <label>Monto Recibido:</label>
                         <input id="dev" type="number" class="form-control" placeholder="Ingrese Monto Recibido" v-model="pago.monto" @change="validation">
                     </div>
+                        <label v-if="pago.monto == null || pago.monto == ''" style="color:red;"> Monto Requerido.</label>
                 </div>
                 <div class="col-4">
                     <div v-if="!pago.tarjeta || pago.tarjeta == null" class="form-group" style="padding-top:35px">
                         <label>Devolución: {{calculoDevolucion}}</label>
                     </div>
                 </div>
-                <div class="col-4" style="padding-left:45px">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" v-model="pago.tarjeta" >
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Tarjeta
-                        </label>
+                <!--
+                    <div class="col-4" style="padding-left:45px">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="pago.tarjeta" >
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Tarjeta
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-4">
+                -->
+                <div class="col-12">
                     <div style="padding-top: 10px;">                    
                           <button class="btn btn-success" v-on:click="createInvoice">
                               Generar Factura
@@ -317,7 +320,7 @@ export default {
                 return;
             }
             this.productos.precioProducto = this.state.venproducto
-            console.log(this.productos.producto)
+            //console.log(this.productos.producto)
             // eslint-disable-next-line no-unused-vars
             Object.entries(this.productos.producto).forEach(([key, value]) => {
                 console.log(value.propreciosugerido)
@@ -433,16 +436,16 @@ export default {
             }
            
             if(this.pago.monto== "" || this.pago.monto == null){
-            this.$toast.show("Monto requerido.", {
-                type: "error",
-            });
-            return
+                this.$toast.show("Monto requerido.", {
+                    type: "error",
+                });
+                return
             }
             if(this.pago.monto < this.pago.total ){
                 this.$toast.show("Fondos insuficientes.", {
                     type: "error",
-            });
-            return
+                });
+                return
             }
            
             // eslint-disable-next-line no-unused-vars
