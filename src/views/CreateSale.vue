@@ -447,18 +447,14 @@ export default {
                 });
                 return
             }
-           
             // eslint-disable-next-line no-unused-vars
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/data", this.pago).then(response => {
                 //console.log(response.data)
                 
-                
             // eslint-disable-next-line no-unused-vars
             }).catch(e => {
                 //console.log(e.response);
-                
           })
-      
             axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/factura", this.ventas.venta).then(response => {
                 //console.log(response.data)
                 this.pago.monto = null
@@ -474,7 +470,6 @@ export default {
                     title: 'Factura Generada!!',
                     icon: 'success',
                 })
-                
             // eslint-disable-next-line no-unused-vars
             }).catch(e => {
                 //console.log(e.response);
