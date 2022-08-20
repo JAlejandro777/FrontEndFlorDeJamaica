@@ -307,7 +307,7 @@ export default {
             return 
         }
         //console.log(this.state.contrasena)
-         axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/usuarios", this.state ).then((result) => {
+         axios.post("https://backendcentronaturista.herokuapp.com/FlorDeJamaica/validationCredenciales", this.state ).then((result) => {
             //console.log(result.data[0]);
             if(result.data.length > 1){
                 localStorage.setItem('sesion', 'activa');
