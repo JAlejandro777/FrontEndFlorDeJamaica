@@ -40,7 +40,7 @@
       <i v-if="(modal.flagcon) && (contraseña.contraseña != null) && (contraseña.contraseña != '')" class="fas fa-eye-slash" v-on:click="modal.flagcon = false"></i>
     </MDBModalBody>
     <MDBModalFooter>
-      <MDBBtn color="secondary" @click="exampleModal.flag = false">Close</MDBBtn>
+      <MDBBtn color="secondary" @click="modal.flag = false">Close</MDBBtn>
       <button  class="btn btn-secondary" @click="verifyPass">Enviar</button>
     </MDBModalFooter>
   </MDBModal>
